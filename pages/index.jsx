@@ -1,22 +1,48 @@
-useEffect(() => {
-  const fallbackLocation = { latitude: 37.5665, longitude: 126.9780 }; // 서울 좌표
+import { useEffect, useState } from "react";
+import { fetchWeatherByCoords } from "../lib/weather";
+import WeatherInfo from "../components/WeatherInfo";
 
-  if (!navigator.geolocation) {
-    console.log("⚠ 위치 정보 사용 불가. 기본 좌표 사용.");
-    fetchWeatherByCoords(fallbackLocation.latitude, fallbackLocation.longitude).then(setWeather);
-    return;
-  }
+export default function HomePage() {
+  const [weather, setWeather] = useState(null);
 
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      const { latitude, longitude } = position.coords;
-      const result = await fetchWeatherByCoords(latitude, longitude);
-      setWeather(result);
-    },
-    async (error) => {
-      console.error("❌ 위치 정보를 불러올 수 없습니다. 기본 좌표로 대체합니다.", error);
-      const result = await fetchWeatherByCoords(fallbackLocation.latitude, fallbackLocation.longitude);
-      setWeather(result);
+  useEffect(() => {
+    const fallbackLocation = { latitude: 37.5665, longitude: 126.9780 };
+
+    if (!navigator.geolocation) {
+      console.warn("❗ 위치 정보 기능을 지원하지 않음");
+      fetchWeatherByCoords(fallbackLocation.latitude, fallbackLocation.longitude)
+        .then(setWeather)
+        .catch(err => console.error("🌩️ fallback 날씨 API 오류:", err));
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          console.log("📍 위치 가져오기 성공:", latitude, longitude);
+          const result = await fetchWeatherByCoords(latitude, longitude);
+          setWeather(result);
+        } catch (err) {
+          console.error("🌩️ 날씨 API 오류:", err);
+        }
+      },
+      async (error) => {
+        console.warn("📍 위치 실패, fallback 좌표 사용:", error);
+        try {
+          const result = await fetchWeatherByCoords(fallbackLocation.latitude, fallbackLocation.longitude);
+          setWeather(result);
+        } catch (err) {
+          console.error("🌩️ fallback 날씨 API 오류:", err);
+        }
+      }
+    );
+  }, []);
+
+  return (
+    <div>
+      <h1>AI 추천 코디</h1>
+      <WeatherInfo weather={weather} />
+    </div>
   );
-}, []);
+}

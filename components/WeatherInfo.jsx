@@ -4,6 +4,8 @@ import React from "react";
 export default function WeatherInfo({ weather }) {
   if (!weather) return null;
 
+  console.log("🔍 날씨 아이콘 URL:", weather.icon);
+  
   return (
     <div style={{
       backgroundColor: "#f0f0f0",

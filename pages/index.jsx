@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchWeatherByCoords } from "../../lib/weather"; // 위치는 상대경로로 조정하세요
+import { fetchWeatherByCoords } from "../lib/weather"; // 경로 수정됨
 
 export default function WeatherComponent() {
   const [weather, setWeather] = useState(null);

@@ -2,4 +2,3 @@
 export default function DummyType() {
     return null;
   }
-  

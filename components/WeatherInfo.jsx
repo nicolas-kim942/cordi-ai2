@@ -14,7 +14,7 @@ export default function WeatherInfo({ weather }) {
     }}>
       <h2>📍 현재 위치 날씨</h2>
       <p><strong>{weather.location}</strong> - {weather.condition}, {weather.tempC}°C</p>
-      <img src={`https:${weather.icon}`} alt="weather icon" />
+      <img src={weather.icon.startsWith("//") ? `https:${weather.icon}` : weather.icon} alt="weather icon" />
     </div>
   );
 }

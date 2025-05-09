@@ -3,18 +3,18 @@ import { fetchWeatherByCoords } from "../../lib/weather";
 import { getStyleByWeather } from "../../lib/weatherStyleMapper";
 import WeatherInfo from "../../components/WeatherInfo";
 
-
 export default function RecommendationPage() {
   const [weather, setWeather] = useState(null);
   const [styleType, setStyleType] = useState("");
 
   useEffect(() => {
-    const fallbackLocation = { latitude: 37.5665, longitude: 126.9780 };
+    const fallbackLocation = { latitude: 37.5665, longitude: 126.9780 }; // 서울 기본 좌표
 
     const fetchData = async (lat, lon) => {
       try {
         const result = await fetchWeatherByCoords(lat, lon);
         setWeather(result);
+
         const style = getStyleByWeather(result.condition);
         setStyleType(style);
       } catch (err) {
@@ -31,7 +31,7 @@ export default function RecommendationPage() {
           fetchData(latitude, longitude);
         },
         (err) => {
-          console.warn("위치 접근 실패:", err);
+          console.warn("📍 위치 실패, 기본 좌표 사용:", err);
           fetchData(fallbackLocation.latitude, fallbackLocation.longitude);
         }
       );
@@ -48,6 +48,7 @@ export default function RecommendationPage() {
           <span style={{ color: "#f06292" }}>{styleType}</span>
         </h2>
       )}
+      <p>더 멋진 UI는 곧 적용될 예정이에요!</p>
     </div>
   );
 }

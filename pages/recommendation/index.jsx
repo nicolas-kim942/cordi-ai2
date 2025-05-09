@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { fetchWeatherByCoords } from "../../lib/weather";
 import { getStyleByWeather } from "../../lib/weatherStyleMapper";
 import WeatherInfo from "../../components/WeatherInfo";
-import { getStyleByWeather } from "../../lib/weatherStyleMapper";
 
 
 export default function RecommendationPage() {
